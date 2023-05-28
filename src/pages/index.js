@@ -14,6 +14,7 @@ export default function Home() {
                     <img src={session?.user?.image} alt="avatar" className="w-10 rounded-full object-cover" />
                 </div>
             </div>
+            <div className="mt-3 text-lg">get all user</div>
         </Layout>
     );
 }

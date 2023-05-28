@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ['./src/pages/**/*.{js,ts,jsx,tsx,mdx}', './src/components/**/*.{js,ts,jsx,tsx,mdx}', './src/app/**/*.{js,ts,jsx,tsx,mdx}'],
+    content: [
+        './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/app/**/*.{js,ts,jsx,tsx,mdx}'
+    ],
     theme: {
         extend: {
             backgroundImage: {
@@ -11,7 +15,8 @@ module.exports = {
                 1: '1 1 0%',
                 2: '2 2 0%',
                 3: '3 3 0%',
-                4: '4 4 0%'
+                4: '4 4 0%',
+                8: '8 8 0%'
             },
             color: {
                 colors: {

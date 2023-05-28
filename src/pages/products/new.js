@@ -1,11 +1,10 @@
 import React from 'react';
 import Layout from '@/components/Layout';
-import FormProduct from '@/components/products/FormProduct';
-
+import FormProduct from '../../components/FormProduct';
 const NewProduct = () => {
     return (
         <Layout>
-            <h1 className="text-center uppercase font-semibold text-[24px] mb-3">NewProduct</h1>
+            <h1 className="text-center capitalize font-semibold text-[24px] mb-3">create a new product</h1>
             <FormProduct />
         </Layout>
     );

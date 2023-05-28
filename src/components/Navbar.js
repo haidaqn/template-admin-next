@@ -8,7 +8,6 @@ const Navbar = () => {
     const active = `flex gap-3 p-2 mr-4 bg-white text-blue-900 rounded-l-lg`;
     const router = useRouter();
     const { pathname } = router;
-    console.log(pathname);
 
     return (
         <div className="p-4 capitalize pr-0">
@@ -47,7 +46,10 @@ const Navbar = () => {
                     </svg>
                     <span>Dashboard</span>
                 </Link>
-                <Link href={'/products'} className={pathname === '/products' ? active : notActive}>
+                <Link
+                    href={'/products'}
+                    className={pathname === '/products' || pathname === '/products/new' ? active : notActive}
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
