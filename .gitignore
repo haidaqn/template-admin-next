@@ -27,6 +27,12 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# Ignore node_modules directory
+node_modules/
+
+# Ignore .env file
+.env
+
 # vercel
 .vercel
 
