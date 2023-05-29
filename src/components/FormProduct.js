@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import HashLoader from 'react-spinners/ClipLoader';
+import Spinner from './Spinner';
 
 const FormProduct = ({
     _id,
@@ -11,12 +12,13 @@ const FormProduct = ({
     images: imageExisting
 }) => {
     const router = useRouter();
+    const [isUploading, setIsUploading] = useState(false);
     const [loader, setLoader] = useState(false);
     const [payload, setPayload] = useState({
         title: titleExisting,
         description: descriptionExisting,
         price: priceExisting,
-        image: imageExisting || []
+        images: imageExisting || []
     });
     const [goToProduct, setGoToProduct] = useState(false);
     const handleSubmit = async (e) => {
@@ -40,14 +42,19 @@ const FormProduct = ({
     useEffect(() => {
         if (goToProduct) router.push('/products');
     }, [goToProduct]);
-
     const upLoadImages = async (e) => {
         const files = [...e?.target?.files];
+        setIsUploading(true);
         if (files?.length > 0) {
-            const data = new FormData();
-            files?.forEach((file) => data.append('file ', file));
-            const response = await axios.post('/api/upload', data);
-            console.log(response);
+            try {
+                const data = new FormData();
+                files?.forEach((file) => data.append('file', file));
+                const response = await axios.post('/api/upload', data);
+                setPayload((prev) => ({ ...prev, images: [...prev.images, ...response?.data?.links] }));
+                setIsUploading(false);
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -70,8 +77,20 @@ const FormProduct = ({
                             onChange={(e) => setPayload((prev) => ({ ...prev, title: e.target.value }))}
                         />
                     </div>
-                    <div className="mb-5">
-                        <label>Photos</label>
+                    <label>Photos</label>
+                    <div className="mb-5 flex flex-wrap gap-2">
+                        {!payload?.images.length > 0 ? (
+                            <h1>no image</h1>
+                        ) : (
+                            payload?.images?.map((image) => (
+                                <img key={image} src={image} className="w-24 h-24 rounded-lg" />
+                            ))
+                        )}
+                        {isUploading && (
+                            <div className="h-24 flex items-center">
+                                <Spinner />
+                            </div>
+                        )}
                         <label className="w-24 cursor-pointer h-24 flex flex-col bg-gray-200 border justify-center items-center gap-1">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +109,6 @@ const FormProduct = ({
                             <span className="text-lg font-medium">upload</span>
                             <input multiple type="file" onChange={(e) => upLoadImages(e)} className="hidden" />
                         </label>
-                        <div className="">{!payload.image.length > 0 && <h1>no image</h1>}</div>
                     </div>
                     <div className="mb-5">
                         <label>Description</label>
