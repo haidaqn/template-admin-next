@@ -3,13 +3,20 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import HashLoader from 'react-spinners/ClipLoader';
 
-const FormProduct = ({ _id, title: titleExisting, description: descriptionExisting, price: priceExisting }) => {
+const FormProduct = ({
+    _id,
+    title: titleExisting,
+    description: descriptionExisting,
+    price: priceExisting,
+    images: imageExisting
+}) => {
     const router = useRouter();
     const [loader, setLoader] = useState(false);
     const [payload, setPayload] = useState({
         title: titleExisting,
         description: descriptionExisting,
-        price: priceExisting
+        price: priceExisting,
+        image: imageExisting || []
     });
     const [goToProduct, setGoToProduct] = useState(false);
     const handleSubmit = async (e) => {
@@ -34,6 +41,16 @@ const FormProduct = ({ _id, title: titleExisting, description: descriptionExisti
         if (goToProduct) router.push('/products');
     }, [goToProduct]);
 
+    const upLoadImages = async (e) => {
+        const files = [...e?.target?.files];
+        if (files?.length > 0) {
+            const data = new FormData();
+            files?.forEach((file) => data.append('file ', file));
+            const response = await axios.post('/api/upload', data);
+            console.log(response);
+        }
+    };
+
     return (
         <>
             {loader ? (
@@ -52,6 +69,28 @@ const FormProduct = ({ _id, title: titleExisting, description: descriptionExisti
                             name="title"
                             onChange={(e) => setPayload((prev) => ({ ...prev, title: e.target.value }))}
                         />
+                    </div>
+                    <div className="mb-5">
+                        <label>Photos</label>
+                        <label className="w-24 cursor-pointer h-24 flex flex-col bg-gray-200 border justify-center items-center gap-1">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                                />
+                            </svg>
+                            <span className="text-lg font-medium">upload</span>
+                            <input multiple type="file" onChange={(e) => upLoadImages(e)} className="hidden" />
+                        </label>
+                        <div className="">{!payload.image.length > 0 && <h1>no image</h1>}</div>
                     </div>
                     <div className="mb-5">
                         <label>Description</label>

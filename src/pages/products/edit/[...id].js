@@ -18,6 +18,8 @@ const EditProduct = () => {
         fetchData();
     }, [id]);
 
+    // console.log(data);
+
     return (
         <Layout>
             <h1>Edit Product</h1>

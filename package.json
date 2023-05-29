@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.341.0",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
         "@hookform/resolvers": "^3.1.0",
@@ -21,9 +22,12 @@
         "axios": "^1.4.0",
         "eslint": "8.41.0",
         "eslint-config-next": "13.4.4",
+        "fs": "^0.0.1-security",
         "i": "^0.3.7",
+        "mime-types": "^2.1.35",
         "mongodb": "^5.5.0",
         "mongoose": "^7.2.1",
+        "multiparty": "^4.2.3",
         "next": "^13.4.4",
         "next-auth": "^4.22.1",
         "npm": "^9.6.7",

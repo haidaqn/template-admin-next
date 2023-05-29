@@ -8,7 +8,7 @@ const bucketName = 'dawid-next-ecommerce';
 
 export default async function handle(req, res) {
     await mongooseConnect();
-    await isAdminRequest(req, res);
+    // await isAdminRequest(req, res);
 
     const form = new multiparty.Form();
     const { fields, files } = await new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ export default async function handle(req, res) {
             resolve({ fields, files });
         });
     });
-    console.log('length:', files.file.length);
+    console.log('length:', files?.file.length);
     const client = new S3Client({
         region: 'us-east-1',
         credentials: {
