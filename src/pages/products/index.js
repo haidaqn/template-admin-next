@@ -13,11 +13,15 @@ const products = () => {
     };
     const [productList, setProductList] = useState([]);
 
-    useEffect(() => {
-        axios.get('/api/products').then((response) => {
+    const fetchData = async () => {
+        await axios.get('/api/products').then((response) => {
             setProductList(response.data);
         });
-    }, []);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [productList]);
 
     return (
         <Layout>
