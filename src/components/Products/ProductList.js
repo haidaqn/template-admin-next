@@ -1,13 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import ProductItem from './ProductItem';
 import HashLoader from 'react-spinners/ClipLoader';
+import axios from 'axios';
 
-const ProductList = ({ productList }) => {
+const ProductList = () => {
     const [loader, setLoader] = useState(true);
-
+    const [productList, setProductList] = useState([]);
+    const fetchData = async () => {
+        await axios.get('/api/products').then((response) => {
+            setProductList(response.data);
+        });
+    };
+    const handleCategoryDelete = useCallback(async (id) => {
+        const response = await axios.delete(`/api/products?id=${id}`);
+        if (response) fetchData();
+    }, []);
     useEffect(() => {
-        if (productList.length > 0) setLoader(false);
-    }, [productList]);
+        fetchData();
+    }, []);
 
     return (
         <div className="flex flex-col gap-3 mb-10 custom_scrollbar max-h-[650px] overflow-hidden overflow-y-auto">
@@ -27,7 +37,11 @@ const ProductList = ({ productList }) => {
                     </thead>
                     <tbody className="">
                         {productList.map((product) => (
-                            <ProductItem key={product._id} title={product.title} id={product._id} />
+                            <ProductItem
+                                key={product._id}
+                                product={product}
+                                handleCategoryDelete={handleCategoryDelete}
+                            />
                         ))}
                     </tbody>
                 </table>

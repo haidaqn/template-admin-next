@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
-const ProductItem = ({ product, handleCategoryDelete }) => {
+const CategoryItem = ({ category, onCategoryDelete }) => {
+    const successfully = () => toast.success('Delete SuccessFully!');
     const [clickDelete, setClickDelete] = useState(false);
     const [success, setSuccess] = useState(false);
-    const successfully = () => toast.success('Delete SuccessFully!');
-    console.log(product);
+
     const handleDeleteConfirmation = () => {
         setSuccess(true);
-        setClickDelete(false);
-        handleCategoryDelete(product?._id);
+        onCategoryDelete(category._id);
     };
+
     useEffect(() => {
         if (success) {
             successfully();
@@ -24,10 +24,11 @@ const ProductItem = ({ product, handleCategoryDelete }) => {
     return (
         <>
             <tr>
-                <td className="w-[85%] px-4 py-2 border">{product?.title}</td>
-                <td className="px-4 py-2 border">
+                <td className="w-[43%] border py-1 pl-7">{category?.name}</td>
+                <td className="w-[43%] border py-1 pl-7">{category?.parent?.name}</td>
+                <td className="w-[14%] border py-1 px-2 ">
                     <div className="flex justify-center items-center gap-3">
-                        <Link className="w-8 h-8" href={'/products/edit/' + product?._id}>
+                        <Link className="w-8 h-8" href={'#'}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -43,7 +44,7 @@ const ProductItem = ({ product, handleCategoryDelete }) => {
                                 />
                             </svg>
                         </Link>
-                        <Link className="w-8 h-8" onClick={() => setClickDelete(true)} href={'/products'}>
+                        <Link className="w-8 h-8" href={'/categories'} onClick={() => setClickDelete(true)}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -65,7 +66,7 @@ const ProductItem = ({ product, handleCategoryDelete }) => {
             {clickDelete && (
                 <div className="fixed z-10 inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white w-[300px] h-32 flex flex-col items-center justify-center rounded-lg">
-                        <p>Are you sure to delete {product?.title} ?</p>
+                        <p>Are you sure to delete {category?.name} ?</p>
                         <div className="flex gap-4 mt-4">
                             <button
                                 onClick={() => setClickDelete(false)}
@@ -74,9 +75,7 @@ const ProductItem = ({ product, handleCategoryDelete }) => {
                                 Cancel
                             </button>
                             <button
-                                onClick={() => {
-                                    handleDeleteConfirmation();
-                                }}
+                                onClick={() => handleDeleteConfirmation()}
                                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                             >
                                 Confirm Delete
@@ -90,4 +89,4 @@ const ProductItem = ({ product, handleCategoryDelete }) => {
     );
 };
 
-export default ProductItem;
+export default CategoryItem;
