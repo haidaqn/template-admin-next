@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import ProductList from '../../components/Products/ProductList';
 
 const products = () => {

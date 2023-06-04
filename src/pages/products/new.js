@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@/components/Layout';
-import FormProduct from '../../components/FormProduct';
+import FormProduct from '../../components/Products/FormProduct';
 const NewProduct = () => {
     return (
         <Layout>

@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import HashLoader from 'react-spinners/ClipLoader';
 import OrderItem from './OrderItem';
+import axios from 'axios';
 
-const OrderList = ({ orders }) => {
+const OrderList = () => {
     const [loader, setLoader] = useState(true);
 
+    const [orders, setOrders] = useState([]);
+
+    const fetchData = async () => {
+        await axios.get('/api/orders').then((response) => setOrders(response?.data));
+    };
     useEffect(() => {
         if (orders.length > 0) setLoader(false);
-    }, [orders]);
+        else fetchData();
+    }, []);
 
     return (
         <div className="flex flex-col gap-3 mb-10 custom_scrollbar max-h-[650px] overflow-hidden overflow-y-auto">

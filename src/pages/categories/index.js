@@ -1,4 +1,3 @@
-import React from 'react';
 import Layout from '@/components/Layout';
 import FormCategory from '@/components/Categories/FormCategory';
 import CategoryList from '@/components/Categories/CategoryList';

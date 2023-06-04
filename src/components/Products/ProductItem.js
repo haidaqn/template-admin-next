@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -8,7 +7,7 @@ const ProductItem = ({ product, handleCategoryDelete }) => {
     const [clickDelete, setClickDelete] = useState(false);
     const [success, setSuccess] = useState(false);
     const successfully = () => toast.success('Delete SuccessFully!');
-    console.log(product);
+
     const handleDeleteConfirmation = () => {
         setSuccess(true);
         setClickDelete(false);

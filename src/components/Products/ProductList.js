@@ -7,9 +7,7 @@ const ProductList = () => {
     const [loader, setLoader] = useState(true);
     const [productList, setProductList] = useState([]);
     const fetchData = async () => {
-        await axios.get('/api/products').then((response) => {
-            setProductList(response.data);
-        });
+        await axios.get('/api/products').then((response) => setProductList(response.data));
     };
     const handleCategoryDelete = useCallback(async (id) => {
         const response = await axios.delete(`/api/products?id=${id}`);

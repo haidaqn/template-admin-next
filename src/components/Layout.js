@@ -4,7 +4,6 @@ import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
     const { data: session } = useSession();
-    // console.log(session);
     if (!session) {
         return (
             <div className={`bg-blue-900 w-screen h-screen flex items-center`}>
@@ -17,7 +16,7 @@ const Layout = ({ children }) => {
         );
     }
     return (
-        <div className={`bg-blue-900 w-screen h-screen flex`}>
+        <div className="bg-blue-900 w-screen h-screen flex overflow-hidden">
             <div className="flex-1">
                 <Navbar />
             </div>

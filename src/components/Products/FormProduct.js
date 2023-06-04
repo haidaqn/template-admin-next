@@ -2,14 +2,15 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import HashLoader from 'react-spinners/ClipLoader';
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
 const FormProduct = ({
     _id,
     title: titleExisting,
     description: descriptionExisting,
     price: priceExisting,
-    images: imageExisting
+    images: imageExisting,
+    category: categoryExisting
 }) => {
     const router = useRouter();
     const [isUploading, setIsUploading] = useState(false);
@@ -18,8 +19,13 @@ const FormProduct = ({
         title: titleExisting,
         description: descriptionExisting,
         price: priceExisting,
-        images: imageExisting || []
+        images: imageExisting || [],
+        category: categoryExisting
     });
+    const [categories, setCategories] = useState([]);
+    const fetchData = async () => {
+        await axios.get('/api/categories').then((response) => setCategories(response?.data));
+    };
     const [goToProduct, setGoToProduct] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,6 +44,10 @@ const FormProduct = ({
             }
         }
     };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     useEffect(() => {
         if (goToProduct) router.push('/products');
@@ -76,6 +86,21 @@ const FormProduct = ({
                             name="title"
                             onChange={(e) => setPayload((prev) => ({ ...prev, title: e.target.value }))}
                         />
+                    </div>
+                    <div className="">
+                        <label>Category</label>
+                        <select
+                            value={payload?.category}
+                            onChange={(ev) => setPayload((prev) => ({ ...prev, category: ev.target.value }))}
+                        >
+                            <option value="">Uncategorized</option>
+                            {categories.length > 0 &&
+                                categories.map((c) => (
+                                    <option key={c._id} value={c._id}>
+                                        {c.name}
+                                    </option>
+                                ))}
+                        </select>
                     </div>
                     <label>Photos</label>
                     <div className="mb-5 flex flex-wrap gap-2">
@@ -116,7 +141,6 @@ const FormProduct = ({
                             className="p-4 mt-2"
                             placeholder="Description"
                             value={payload?.description}
-                            name="description"
                             onChange={(e) => setPayload((prev) => ({ ...prev, description: e.target.value }))}
                         />
                     </div>
@@ -127,7 +151,6 @@ const FormProduct = ({
                             className="p-3 mt-2"
                             placeholder="Price"
                             value={payload?.price}
-                            name="price"
                             onChange={(e) => setPayload((prev) => ({ ...prev, price: e.target.value }))}
                         />
                     </div>

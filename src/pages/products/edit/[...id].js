@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
-import FormProduct from '@/components/FormProduct';
+import FormProduct from '@/components/Products/FormProduct';
 import axios from 'axios';
 
 const EditProduct = () => {
@@ -18,11 +18,9 @@ const EditProduct = () => {
         fetchData();
     }, [id]);
 
-    // console.log(data);
-
     return (
         <Layout>
-            <h1>Edit Product</h1>
+            <h1 className="flex justify-center items-center text-[24px] font-medium">Edit Product {data?.name}</h1>
             {data && <FormProduct {...data} />}
         </Layout>
     );

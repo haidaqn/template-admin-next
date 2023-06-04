@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 
 const CategoryItem = ({ category, onCategoryDelete }) => {
     const successfully = () => toast.success('Delete SuccessFully!');
@@ -28,7 +27,7 @@ const CategoryItem = ({ category, onCategoryDelete }) => {
                 <td className="w-[43%] border py-1 pl-7">{category?.parent?.name}</td>
                 <td className="w-[14%] border py-1 px-2 ">
                     <div className="flex justify-center items-center gap-3">
-                        <Link className="w-8 h-8" href={'#'}>
+                        <Link className="w-8 h-8" href={`/categories/edit/${category?._id}`}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
