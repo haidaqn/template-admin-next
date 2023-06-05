@@ -10,11 +10,13 @@ const FormProduct = ({
     description: descriptionExisting,
     price: priceExisting,
     images: imageExisting,
-    category: categoryExisting
+    category: categoryExisting,
+    properties: propertyExisting
 }) => {
     const router = useRouter();
     const [isUploading, setIsUploading] = useState(false);
     const [loader, setLoader] = useState(false);
+    const [productProperties, setProductProperties] = useState(propertyExisting || {});
     const [payload, setPayload] = useState({
         title: titleExisting,
         description: descriptionExisting,
@@ -24,26 +26,37 @@ const FormProduct = ({
     });
     const [categories, setCategories] = useState([]);
     const fetchData = async () => {
-        await axios.get('/api/categories').then((response) => setCategories(response?.data));
+        await axios.get('/api/categories').then((response) => {
+            setCategories(response?.data);
+        });
     };
     const [goToProduct, setGoToProduct] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoader(true);
+        const data = { ...payload, properties: productProperties };
         if (_id) {
-            const response = await axios.put('/api/products', { ...payload, _id });
+            const response = await axios.put('/api/products', { data, _id });
             if (response) {
                 setGoToProduct(true);
                 setLoader(false);
             }
         } else {
-            const response = await axios.post('/api/products', payload);
+            const response = await axios.post('/api/products', data);
             if (response) {
                 setGoToProduct(true);
                 setLoader(false);
             }
         }
     };
+
+    function setProductProp(propName, value) {
+        setProductProperties((prev) => {
+            const newProductProps = { ...prev };
+            newProductProps[propName] = value;
+            return newProductProps;
+        });
+    }
 
     useEffect(() => {
         fetchData();
@@ -67,6 +80,23 @@ const FormProduct = ({
             }
         }
     };
+    const [propertiesToFill, setPropertiesToFill] = useState([]);
+
+    useEffect(() => {
+        if (categories.length > 0 && payload.category) {
+            let info = categories.find((item) => item._id === payload.category);
+            let tempPropertiesToFill = [...info.properties];
+            while (info?.parent?._id) {
+                const parentCat = categories.find(({ _id }) => _id === info?.parent?._id);
+                tempPropertiesToFill = [...tempPropertiesToFill, ...parentCat.properties];
+                info = parentCat;
+            }
+            setPropertiesToFill(tempPropertiesToFill);
+            console.log(tempPropertiesToFill);
+        }
+    }, [payload.category, categories]);
+
+    //
 
     return (
         <>
@@ -90,6 +120,7 @@ const FormProduct = ({
                     <div className="">
                         <label>Category</label>
                         <select
+                            className="p-2"
                             value={payload?.category}
                             onChange={(ev) => setPayload((prev) => ({ ...prev, category: ev.target.value }))}
                         >
@@ -102,7 +133,29 @@ const FormProduct = ({
                                 ))}
                         </select>
                     </div>
-                    <label>Photos</label>
+                    {propertiesToFill.length > 0 && payload.category !== '' && (
+                        <div className="my-3">
+                            {propertiesToFill.map((item) => (
+                                <div key={item.name} className="flex gap-3">
+                                    <label>{item.name}</label>
+                                    <div>
+                                        <select
+                                            value={productProperties[item.name] || ''}
+                                            onChange={(ev) => setProductProp(item.name, ev.target.value)}
+                                        >
+                                            <option value="">Select an option</option>
+                                            {item.values.split(',').map((value) => (
+                                                <option key={value} value={value}>
+                                                    {value}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    <label className="mt-5">Photos</label>
                     <div className="mb-5 flex flex-wrap gap-2">
                         {!payload?.images.length > 0 ? (
                             <h1>no image</h1>

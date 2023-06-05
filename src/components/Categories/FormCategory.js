@@ -23,6 +23,7 @@ const FormCategory = ({ data }) => {
             name: '',
             parent: ''
         });
+        setProperties([]);
     };
 
     const handlePropertyValuesChange = (index, property, newValues) => {
@@ -53,11 +54,22 @@ const FormCategory = ({ data }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const data = { ...payload, properties };
         alert('submit');
         if (data?._id) {
+            const response = await axios.put('/api/categories', data);
+            if (response) {
+                fetchData();
+                resetPayload();
+            }
         } else {
+            const response = await axios.post('/api/categories', data);
+            if (response) {
+                fetchData();
+                resetPayload();
+            }
         }
     };
     useEffect(() => {
@@ -69,7 +81,7 @@ const FormCategory = ({ data }) => {
             <form className="flex flex-col gap-3 mb-5 overflow-hidden">
                 <div className="w-full flex gap-3 ">
                     <input
-                        value={payload?.parent}
+                        value={payload?.name}
                         type="text"
                         className="py-1 px-4 w-3/5 h-10"
                         placeholder="Example: iphone12"

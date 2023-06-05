@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
         return (
             <div className={`bg-blue-900 w-screen h-screen flex items-center`}>
                 <div className="w-full text-center">
-                    <button onClick={() => signIn()} className="bg-white p-2 rounded-md">
+                    <button onClick={async () => await signIn()} className="bg-white p-2 rounded-md">
                         login with google
                     </button>
                 </div>
